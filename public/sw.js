@@ -1,10 +1,10 @@
 const CACHE_NAME = 'jhatpat-cache-v1';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/favicon.svg',
-  '/icons.svg'
+  './',
+  'index.html',
+  'manifest.json',
+  'favicon.svg',
+  'icons.svg'
 ];
 
 // Install event - caching basic shell

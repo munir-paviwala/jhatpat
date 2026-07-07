@@ -275,7 +275,7 @@ function App() {
           <span className="flourish-symbol">❦</span>
         </div>
         <h1>Jhatpat</h1>
-        <span className="header-subtitle">a quick-capture ledger of thoughts & actions</span>
+        <span className="header-subtitle">a simple to-do ledger of thoughts & actions</span>
 
         {/* Sync/Status indicators */}
         {(isLoading || syncStatusMsg) && (

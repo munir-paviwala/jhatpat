@@ -97,11 +97,11 @@ async function getOrCreateCustomList(title: string, storageKey: string): Promise
 }
 
 export async function getNotesListId(): Promise<string> {
-  return getOrCreateCustomList('Quick-Capture Notes', NOTES_LIST_ID_KEY);
+  return getOrCreateCustomList('Jhatpat Notes', NOTES_LIST_ID_KEY);
 }
 
 export async function getArchiveListId(): Promise<string> {
-  return getOrCreateCustomList('Quick-Capture Archive', ARCHIVE_LIST_ID_KEY);
+  return getOrCreateCustomList('Jhatpat Archive', ARCHIVE_LIST_ID_KEY);
 }
 
 // Queue offline operations
