@@ -1,0 +1,1194 @@
+/* ============================================================
+   JHATPAT — Quick-Capture Todo App
+   Palette: Indian Madder (Dusty Rose), Olive, Sepia Saffron, Plum, Cream
+   ============================================================ */
+
+:root {
+  /* Indian Archive Palette (Light Mode) */
+  --cream:         #fcfaf6;
+  --cream-dark:    #f3edd3;
+  --paper-backing: #f6efe2;
+  --text-dark:     #352922;
+  --text-mid:      #5e493c;
+  --text-light:    #8b7160;
+
+  /* Main colors */
+  --dusty-rose:    #d57a82;
+  --olive:         #6d8051;
+  --saffron-sepia: #d59a58;
+  --plum:          #4c3547;
+  --amber:         #c9892e;
+
+  /* Borders and Shadows */
+  --border:        #e0d2bd;
+  --border-light:  #eae0d0;
+  --shadow-soft:   0 6px 20px rgba(53, 41, 34, 0.08);
+  --shadow-page:   0 12px 30px rgba(53, 41, 34, 0.15);
+  
+  --bg-desk:       #efe8dc;
+  --radius-card:   8px;
+  --radius-tab:    16px;
+}
+
+/* Dark Mode overrides disabled - Jhatpat remains light mode cream by user preference */
+
+/* ---- Reset ---- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---- Base ---- */
+body {
+  font-family: 'Nunito', sans-serif;
+  background-color: var(--bg-desk);
+  color: var(--text-dark);
+  line-height: 1.6;
+  min-height: 100vh;
+  padding: 40px 24px 60px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  transition: background-color 0.3s;
+  /* Soft noise textured desk surface */
+  background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+h1, h2, h3 {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-weight: 700;
+}
+
+.handwritten {
+  font-family: 'Kalam', cursive;
+}
+
+a {
+  color: var(--dusty-rose);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--plum);
+}
+
+/* Main root wrapper reset */
+#root {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ============================================================
+   FOLDER LAYOUT & BACKING CARD
+   ============================================================ */
+.folder-container {
+  background-color: var(--cream);
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-page);
+  padding: 48px 40px 56px;
+  position: relative;
+  z-index: 1;
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  /* subtle gradient simulating folded paper backing & scattered botanical watermark pattern */
+  background-image: 
+      linear-gradient(to right, rgba(0,0,0,0.01) 0px, transparent 20px),
+      linear-gradient(to bottom, rgba(255,255,255,0.02) 0%, transparent 100%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath d='M 40 40 C 35 35 30 45 40 60 C 50 45 45 35 40 40' fill='%23d57a82' opacity='0.02'/%3E%3Ccircle cx='120' cy='50' r='1.5' fill='%23d59a58' opacity='0.02'/%3E%3Cpath d='M 80 120 C 78 115 72 115 75 110 C 78 105 82 108 80 120' stroke='%236d8051' stroke-width='0.8' fill='none' opacity='0.02'/%3E%3Cpath d='M 130 110 L 132 112 L 130 114 L 128 112 Z' fill='%234c3547' opacity='0.015'/%3E%3C/svg%3E");
+}
+
+/* Repeating Indian-style Ogee Arch Border on top and bottom edges of container */
+.folder-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='16' viewBox='0 0 40 16' fill='none'%3E%3Cpath d='M 0 15 C 5 15 10 11 12 8 C 15 4 18 2 20 2 C 22 2 25 4 28 8 C 30 11 35 15 40 15' stroke='%23d59a58' stroke-width='1.2' /%3E%3Ccircle cx='20' cy='8' r='2.5' fill='%23d57a82' /%3E%3Ccircle cx='20' cy='3.5' r='1' fill='%234c3547' /%3E%3Cpath d='M 5 15 Q 10 12 15 15' stroke='%236d8051' stroke-width='0.8' /%3E%3Cpath d='M 25 15 Q 30 12 35 15' stroke='%236d8051' stroke-width='0.8' /%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 40px 16px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  opacity: 0.8;
+}
+
+.folder-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='16' viewBox='0 0 40 16' fill='none'%3E%3Cg transform='translate(0, 16) scale(1, -1)'%3E%3Cpath d='M 0 15 C 5 15 10 11 12 8 C 15 4 18 2 20 2 C 22 2 25 4 28 8 C 30 11 35 15 40 15' stroke='%23d59a58' stroke-width='1.2' /%3E%3Ccircle cx='20' cy='8' r='2.5' fill='%23d57a82' /%3E%3Ccircle cx='20' cy='3.5' r='1' fill='%234c3547' /%3E%3Cpath d='M 5 15 Q 10 12 15 15' stroke='%236d8051' stroke-width='0.8' /%3E%3Cpath d='M 25 15 Q 30 12 35 15' stroke='%236d8051' stroke-width='0.8' /%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 40px 16px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  opacity: 0.8;
+}
+
+/* Elegant stationery letterhead header inside folder */
+.folder-header {
+  text-align: center;
+  margin-bottom: 28px;
+  border-bottom: 1.5px solid var(--border);
+  padding-bottom: 18px;
+  position: relative;
+}
+
+.folder-header h1 {
+  font-size: 42px;
+  color: var(--plum);
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.1);
+}
+
+.folder-header .header-subtitle {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--text-light);
+  letter-spacing: 0.04em;
+  display: block;
+  margin-top: 4px;
+}
+
+.folder-header .header-flourish {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 4px;
+  font-size: 16px;
+  opacity: 0.95;
+}
+
+.folder-header .header-flourish .flourish-symbol {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: default;
+  color: var(--saffron-sepia);
+}
+
+.folder-header .header-flourish .flourish-symbol:hover {
+  transform: scale(1.3) translateY(-2px);
+}
+
+/* ============================================================
+   HORIZONTAL TAB NAVIGATION (FOLDER DIVIDERS)
+   ============================================================ */
+.horizontal-tab-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 2px;
+  margin-bottom: -1.5px; /* Overlaps with the border of .items-list */
+  padding: 0 16px;
+  z-index: 5;
+  position: relative;
+}
+
+/* Tab base */
+.horizontal-tab-nav button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px 8px; /* Extra spacing at the top to give a folder feel */
+  color: var(--text-mid);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 12px 12px 0 0;
+  border: 1.5px solid var(--border);
+  border-bottom: none;
+  cursor: pointer;
+  margin-right: -4px; /* classic overlap effect */
+  background-color: color-mix(in srgb, var(--tab-color) 12%, var(--cream-dark));
+  box-shadow: 2px -2px 5px rgba(53, 41, 34, 0.02);
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* A colorful top-marker stripe on each folder tab to define its theme shape */
+.horizontal-tab-nav button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: var(--tab-color);
+  border-radius: 12px 12px 0 0;
+  opacity: 0.8;
+  transition: height 0.2s;
+}
+
+.horizontal-tab-nav button .tab-icon {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.horizontal-tab-nav button:hover {
+  color: var(--text-dark);
+  background-color: color-mix(in srgb, var(--tab-color) 22%, var(--cream-dark));
+  transform: translateY(-2px);
+  z-index: 6;
+}
+
+/* Folder tab styling based on accents */
+.tab-today     { --tab-color: var(--dusty-rose); }
+.tab-upcoming  { --tab-color: var(--saffron-sepia); }
+.tab-someday   { --tab-color: var(--olive); }
+.tab-notes     { --tab-color: var(--plum); }
+.tab-archive   { --tab-color: var(--text-light); }
+
+/* Active tab style - pops up and turns fully solid */
+.horizontal-tab-nav button.active-tab {
+  color: #ffffff !important;
+  background-color: var(--tab-color) !important;
+  border-color: var(--tab-color);
+  z-index: 10;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 -4px 12px rgba(53, 41, 34, 0.1);
+}
+
+.horizontal-tab-nav button.active-tab::before {
+  height: 0; /* Stripe merges into full background */
+}
+
+/* Responsive horizontal tabs to bottom bar on mobile */
+@media (max-width: 768px) {
+  body {
+    padding: 16px 16px 80px 16px; /* Padding bottom to prevent nav overlay */
+  }
+
+  .horizontal-tab-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    flex-direction: row;
+    width: 100%;
+    background-color: var(--cream-dark);
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
+    border-radius: 0;
+    padding: 8px 12px;
+    gap: 4px;
+    justify-content: space-around;
+    z-index: 100;
+    border-top: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+
+  .horizontal-tab-nav button {
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
+    width: auto;
+    flex: 1;
+    padding: 10px 4px;
+    border-radius: 8px;
+    box-shadow: none;
+    color: var(--text-dark);
+    opacity: 0.6;
+    background-color: transparent !important;
+    border: none;
+    margin-right: 0;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .horizontal-tab-nav button::before {
+    display: none; /* Hide top stripe on mobile bar */
+  }
+
+  .horizontal-tab-nav button.active-tab {
+    transform: translateY(-2px);
+    opacity: 1;
+    font-size: 10.5px;
+    box-shadow: none;
+    border: 1px solid var(--border);
+    background-color: var(--cream) !important;
+    color: var(--text-dark) !important;
+  }
+
+  .horizontal-tab-nav button:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+    background-color: transparent !important;
+  }
+
+  .folder-container {
+    padding: 28px 16px 40px;
+    border-radius: 8px;
+  }
+
+  .folder-header h1 {
+    font-size: 32px;
+  }
+}
+
+/* ============================================================
+   CAPTURE BAR
+   ============================================================ */
+.capture-bar-container {
+  margin-bottom: 24px;
+}
+
+.capture-bar-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-bottom: 1.5px solid var(--border);
+  padding: 4px 0;
+  transition: border-color 0.2s;
+}
+
+.capture-bar-form:focus-within {
+  border-color: var(--oxblood, var(--dusty-rose));
+}
+
+.capture-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 17px;
+  color: var(--text-dark);
+  padding: 8px 48px 8px 12px;
+}
+
+.capture-input::placeholder {
+  color: var(--text-light);
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.capture-submit-btn {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.capture-submit-btn:hover {
+  color: var(--dusty-rose);
+  background-color: rgba(213, 122, 130, 0.08);
+}
+
+.capture-help-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text-light);
+  margin-top: 6px;
+  padding-left: 12px;
+  opacity: 0.8;
+}
+
+/* ============================================================
+   VIEWS & LISTS
+   ============================================================ */
+.view-section-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
+  font-size: 16px;
+  color: var(--border);
+  opacity: 0.7;
+}
+
+.view-header {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  color: var(--plum);
+  margin-bottom: 16px;
+  border-left: 3px solid var(--saffron-sepia);
+  padding-left: 10px;
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background-color: var(--border-light);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-light);
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 16px;
+  background-color: rgba(252, 250, 246, 0.4);
+}
+
+/* ============================================================
+   TASK ROW (WITH SWIPE GESTURE)
+   ============================================================ */
+.task-row-wrapper {
+  position: relative;
+  background-color: var(--cream);
+  overflow: hidden;
+  touch-action: pan-y;
+  transition: background-color 0.2s;
+}
+
+/* Background actions revealed by swipe */
+.task-row-actions-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1;
+}
+
+.action-bg-left {
+  color: var(--olive);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.action-bg-right {
+  color: var(--dusty-rose);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+/* Floating content row */
+.task-row-content {
+  position: relative;
+  background-color: var(--cream);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 2;
+  transition: transform 0.15s ease-out, background-color 0.2s;
+  border-bottom: 1px dashed var(--border-light);
+}
+
+.task-row-content:hover {
+  background-color: var(--cream-dark);
+  box-shadow: inset 3px 0 0 var(--saffron-sepia);
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.custom-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, border-color 0.2s;
+  color: transparent;
+  background-color: var(--cream);
+}
+
+.custom-checkbox.checked {
+  background-color: var(--olive);
+  border-color: var(--olive);
+  color: #fff;
+}
+
+.task-row-text-container {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-title {
+  position: relative;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.task-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 55%;
+  width: 100%;
+  height: 1.5px;
+  background-color: var(--saffron-sepia);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.task-title.completed {
+  color: var(--text-light);
+}
+
+.task-title.completed::after {
+  transform: scaleX(1);
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.task-date-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  padding: 1px 6px;
+  background-color: var(--paper-backing);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-mid);
+}
+
+.task-date-badge.overdue {
+  color: var(--dusty-rose);
+  border-color: var(--dusty-rose);
+}
+
+.task-notes-indicator {
+  font-size: 12px;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Row Action Buttons */
+.task-row-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.task-row-content:hover .task-row-buttons {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .task-row-buttons {
+    opacity: 1; /* Always visible on mobile since hover doesn't exist */
+  }
+}
+
+.row-action-btn {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: var(--text-light);
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.2s, background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.row-action-btn:hover {
+  color: var(--plum);
+  background-color: var(--border-light);
+}
+
+.row-action-btn.delete-btn:hover {
+  color: var(--dusty-rose);
+}
+
+/* ============================================================
+   ONE-TAP TOGGLES (Task vs Note etc)
+   ============================================================ */
+.one-tap-toggle-box {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.one-tap-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  padding: 1px 6px;
+  border: 1px dashed var(--border);
+  background: transparent;
+  border-radius: 4px;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.one-tap-btn:hover {
+  border-color: var(--saffron-sepia);
+  color: var(--text-mid);
+  background-color: var(--paper-backing);
+}
+
+/* ============================================================
+   DETAILS MODAL & EDIT DETAIL
+   ============================================================ */
+.details-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(18, 15, 13, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 16px;
+}
+
+.details-modal {
+  background-color: var(--cream);
+  width: 100%;
+  max-width: 580px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-page);
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+  position: relative;
+  animation: modalFadeIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.details-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.details-header h3 {
+  font-size: 20px;
+  color: var(--plum);
+  flex: 1;
+}
+
+.details-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  display: flex;
+}
+
+.details-close-btn:hover {
+  background-color: var(--border-light);
+  color: var(--text-dark);
+}
+
+.details-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-light);
+}
+
+.text-input {
+  width: 100%;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  color: var(--text-dark);
+  background-color: var(--cream-dark);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.text-input:focus {
+  border-color: var(--dusty-rose);
+}
+
+.details-footer {
+  padding: 14px 24px;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  background-color: var(--cream-dark);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.btn {
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-mid);
+}
+
+.btn-secondary:hover {
+  background-color: var(--border-light);
+}
+
+.btn-primary {
+  background-color: var(--plum);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: var(--text-dark);
+}
+
+/* ============================================================
+   CHECKLIST EDITOR (INTERACTIVE TEXTAREA OR ROWS)
+   ============================================================ */
+.checklist-editor-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checklist-editor-textarea {
+  width: 100%;
+  min-height: 180px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13.5px;
+  color: var(--text-dark);
+  background-color: var(--cream-dark);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px;
+  outline: none;
+  resize: vertical;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.checklist-editor-textarea:focus {
+  border-color: var(--dusty-rose);
+}
+
+.checklist-editor-help {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--text-light);
+  opacity: 0.85;
+}
+
+/* Rendered nested checklist in view mode */
+.nested-checklist-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+  padding-left: 12px;
+  border-left: 1px dotted var(--border);
+}
+
+.nested-checklist-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-mid);
+  padding: 2px 0;
+}
+
+.nested-checklist-checkbox {
+  cursor: pointer;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  margin-top: 3px;
+  transition: color 0.2s;
+}
+
+.nested-checklist-checkbox:hover {
+  color: var(--olive);
+}
+
+.nested-checklist-checkbox.checked {
+  color: var(--olive);
+}
+
+.nested-checklist-text {
+  word-break: break-word;
+}
+
+.nested-checklist-text.checked {
+  text-decoration: line-through;
+  color: var(--text-light);
+  opacity: 0.8;
+}
+
+/* ============================================================
+   SETTINGS OR OAUTH WALL
+   ============================================================ */
+.settings-box {
+  background-color: var(--cream-dark);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.settings-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--plum);
+}
+
+.settings-description {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 2px;
+}
+
+/* Utility classes */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: 8px; }
+.gap-4 { gap: 16px; }
+.w-full { width: 100%; }
+.mt-4 { margin-top: 16px; }
+.mb-4 { margin-bottom: 16px; }
+.text-center { text-align: center; }
+.relative { position: relative; }
+
+/* ============================================================
+   GOOGLE SIGN-IN BUTTON & ADVANCED ACCORDION
+   ============================================================ */
+.google-signin-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.google-signin-btn:hover {
+  background-color: #f9fafb;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.google-signin-btn:active {
+  background-color: #f3f4f6;
+}
+
+/* Google Sign-in button dark override removed - App stays in light mode */
+
+/* ============================================================
+   INTERACTIVE CHECKLIST EDITOR
+   ============================================================ */
+.checklist-interactive-editor {
+  background-color: var(--cream-dark);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.checklist-editor-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.checklist-editor-line-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background-color 0.15s, transform 0.15s;
+}
+
+.checklist-editor-line-row:focus-within {
+  background-color: var(--cream);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.line-indicator-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.line-checkbox-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.line-checkbox-btn.checked {
+  color: var(--olive);
+  transform: scale(1.15);
+}
+
+.line-checkbox-btn:hover {
+  color: var(--dusty-rose);
+}
+
+.line-bullet-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--saffron-sepia);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.line-bullet-btn:hover {
+  opacity: 1;
+  transform: rotate(15deg);
+}
+
+.line-input-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.line-text-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  color: var(--text-dark);
+  padding: 2px 4px;
+  transition: color 0.2s;
+}
+
+.line-text-input.line-through {
+  text-decoration: line-through;
+  text-decoration-color: var(--saffron-sepia);
+  color: var(--text-light);
+  opacity: 0.75;
+}
+
+.line-actions-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.checklist-editor-line-row:hover .line-actions-col {
+  opacity: 1;
+}
+
+.line-delete-row-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-light);
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, background-color 0.15s;
+}
+
+.line-delete-row-btn:hover {
+  color: var(--dusty-rose);
+  background-color: var(--cream-dark);
+}
+
+.checklist-editor-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px dashed var(--border-light);
+  padding-top: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.checklist-add-row-btn {
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  color: var(--text-light);
+  font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace;
+  padding: 4px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+
+.checklist-add-row-btn:hover {
+  border-color: var(--saffron-sepia);
+  color: var(--text-mid);
+  background-color: var(--cream);
+}
+
+.checklist-help-note {
+  font-size: 10px;
+  color: var(--text-light);
+  opacity: 0.8;
+  text-align: right;
+  line-height: 1.3;
+}
+
+/* ============================================================
+   FUN & USER-FOCUSED MICRO-INTERACTIONS
+   ============================================================ */
+.task-row-wrapper {
+  animation: slide-in-row 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes slide-in-row {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.custom-checkbox {
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s, border-color 0.2s !important;
+}
+
+.custom-checkbox:active {
+  transform: scale(0.85);
+}
+
+.custom-checkbox.checked {
+  animation: checkbox-pop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes checkbox-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
